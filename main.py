@@ -14,7 +14,7 @@ def main():
     print(f"Using device: {device}")
 
     # ----Data Loaders----
-    train_loader, val_loader, test_loader = get_dataloaders(batch_size=128,num_workers=4)
+    train_loader, val_loader, test_loader = get_dataloaders(batch_size=128,num_workers=2)
 
     # ----Model, Loss, Optimizer----
     model = BaselineCNN(in_channels=3, num_classes=10).to(device)
