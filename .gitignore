@@ -2,4 +2,5 @@ __pycache__/
 *.pyc
 data/
 best_model.pth
+git rm --cached gpu_training.ipynb
 .ipynb_checkpoints/
