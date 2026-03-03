@@ -20,7 +20,7 @@ def main():
     model = BaselineCNN(in_channels=3, num_classes=10).to(device)
     print(next(model.parameters()).device)
     loss_fn = nn.CrossEntropyLoss()
-    optimizer = optim.Adam(model.parameters(), lr=0.001)
+    optimizer = optim.Adam(model.parameters(), lr=0.001, weight_decay=1e-4)
 
     scheduler = optim.lr_scheduler.StepLR(
         optimizer, 
