@@ -1,0 +1,5 @@
+__pycache__/
+*.pyc
+data/
+best_model.pth
+.ipynb_checkpoints/
