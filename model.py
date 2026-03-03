@@ -9,15 +9,28 @@ class BaselineCNN(nn.Module):
         self.features = nn.Sequential(
             # Conv Layer 1
             nn.Conv2d(in_channels,32,kernel_size=3,padding=1),
+            nn.BatchNorm2d(32),
             nn.ReLU(),
             nn.Conv2d(32,32,kernel_size=3,padding=1),
+            nn.BatchNorm2d(32),
             nn.ReLU(),
             nn.MaxPool2d(2),
 
             # Conv Layer 2
             nn.Conv2d(32,64,kernel_size=3,padding=1),
+            nn.BatchNorm2d(64),
             nn.ReLU(),
             nn.Conv2d(64,64,kernel_size=3,padding=1),
+            nn.BatchNorm2d(64),
+            nn.ReLU(),
+            nn.MaxPool2d(2),
+
+            # Conv Layer 3
+            nn.Conv2d(64,128,3,padding=1),
+            nn.BatchNorm2d(128),
+            nn.ReLU(),
+            nn.Conv2d(128,128,3,padding=1),
+            nn.BatchNorm2d(128),
             nn.ReLU(),
             nn.MaxPool2d(2),
         )
