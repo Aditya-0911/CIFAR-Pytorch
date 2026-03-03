@@ -16,6 +16,7 @@ def train_one_epoch(model, dataloader, optimizer, loss_fn, device):
 
         outputs = model(images)
         loss = loss_fn(outputs, labels)
+        total_loss += loss.item() * images.size(0)
 
         loss.backward()
         optimizer.step()
@@ -24,7 +25,7 @@ def train_one_epoch(model, dataloader, optimizer, loss_fn, device):
         correct += (preds == labels).sum().item()
         total += labels.size(0)
 
-    avg_loss = total_loss / len(dataloader)
+    avg_loss = total_loss / total
     accuracy = correct / total
 
     return avg_loss, accuracy
@@ -45,13 +46,13 @@ def evaluate(model, dataloader, loss_fn, device):
             outputs = model(images)
             loss = loss_fn(outputs, labels)
 
-            total_loss += loss.item()
+            total_loss += loss.item() * images.size(0)
 
             preds = outputs.argmax(dim=1)
             correct += (preds == labels).sum().item()
             total += labels.size(0)
         
-    avg_loss = total_loss / len(dataloader)
+    avg_loss = total_loss / total
     accuracy = correct / total  
 
     return avg_loss, accuracy
