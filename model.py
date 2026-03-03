@@ -40,7 +40,7 @@ class BaselineCNN(nn.Module):
 
         self.classifier = nn.Sequential(
             nn.Flatten(),
-            nn.Linear(64,128),
+            nn.Linear(128,128),
             nn.ReLU(),
             nn.Dropout(0.5),
             nn.Linear(128,num_classes)
