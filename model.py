@@ -73,11 +73,13 @@ class ResnetTransfer(nn.Module):
         self.cnn_head = nn.Sequential(
             nn.Conv2d(512,256,3,padding=1),
             nn.BatchNorm2d(256),
+            nn.Dropout2d(0.5),
             nn.ReLU(),
             nn.MaxPool2d(2),
 
             nn.Conv2d(256,128,3,padding=1),
             nn.BatchNorm2d(128),
+            nn.Dropout2d(0.5),
             nn.ReLU(),
         )
 
