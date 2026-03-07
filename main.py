@@ -4,7 +4,7 @@ import torch.optim as optim
 import argparse
 
 from data import get_dataloaders
-from model import BaselineCNN,ResnetTransfer
+from model import BaselineCNN,ResnetTransfer, ResNetCIFAR
 from train import train_model,evaluate
 
 
@@ -20,7 +20,7 @@ def main():
         "--model",
         type=str,
         default="baseline",
-        choices=["baseline", "resnet"],
+        choices=["baseline", "resnet", "resnet_scratch"]
         help="Choose model architecture"
     )
 
@@ -40,6 +40,9 @@ def main():
 
     elif args.model == "resnet":
         model = ResnetTransfer(num_classes=10)
+
+    elif args.model == "resnet_scratch":
+        model = ResNetCIFAR(num_classes=10)
 
     model = model.to(device)
 
