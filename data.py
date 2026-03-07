@@ -4,7 +4,7 @@ from torch.utils.data import DataLoader,random_split
 
 # CIFAR-10 dataset specific transforms 
 
-def get_transforms():
+def get_transforms(image_size=32):
     """
     Returns train and test transforms for CIFAR-10.
     """
@@ -12,14 +12,16 @@ def get_transforms():
     std  = (0.2470, 0.2435, 0.2616)
 
     train_transform = transforms.Compose([
-        transforms.RandomCrop(32, padding=4),
+        transforms.Resize(image_size),
+        transforms.RandomCrop(image_size, padding=4),
         transforms.RandomHorizontalFlip(),
-        transforms.RandomRotation(10),   # mild rotation
+        transforms.RandomRotation(10),
         transforms.ToTensor(),
         transforms.Normalize(mean, std)
     ])
 
     test_transform = transforms.Compose([
+        transforms.Resize(image_size),
         transforms.ToTensor(),
         transforms.Normalize(mean, std)
     ])
@@ -27,9 +29,9 @@ def get_transforms():
     return train_transform, test_transform
 
 
-def get_dataloaders(batch_size=128, num_workers=4, data_dir="./data"):
+def get_dataloaders(batch_size=128, num_workers=2, data_dir="./data", image_size=32):
 
-    train_transform, test_transform = get_transforms()
+    train_transform, test_transform = get_transforms(image_size=image_size)
 
     # Load full training dataset WITHOUT transform first
     full_train_dataset = datasets.CIFAR10(
