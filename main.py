@@ -1,9 +1,10 @@
 import torch
 import torch.nn as nn
 import torch.optim as optim
+import argparse
 
 from data import get_dataloaders
-from model import BaselineCNN
+from model import BaselineCNN,ResnetTransfer
 from train import train_model,evaluate
 
 
@@ -13,14 +14,42 @@ def main():
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     print(f"Using device: {device}")
 
+    parser = argparse.ArgumentParser()
+
+    parser.add_argument(
+        "--model",
+        type=str,
+        default="baseline",
+        choices=["baseline", "resnet"],
+        help="Choose model architecture"
+    )
+
+    args = parser.parse_args()
+
+    if args.model == "baseline":
+        image_size = 32
+    else:
+        image_size = 224
+
     # ----Data Loaders----
-    train_loader, val_loader, test_loader = get_dataloaders(batch_size=128,num_workers=2)
+    train_loader, val_loader, test_loader = get_dataloaders(batch_size=128,num_workers=2, image_size=image_size)
 
     # ----Model, Loss, Optimizer----
-    model = BaselineCNN(in_channels=3, num_classes=10).to(device)
+    if args.model == "baseline":
+        model = BaselineCNN(in_channels=3, num_classes=10)
+
+    elif args.model == "resnet":
+        model = ResnetTransfer(num_classes=10)
+
+    model = model.to(device)
+
     print(next(model.parameters()).device)
     loss_fn = nn.CrossEntropyLoss()
-    optimizer = optim.Adam(model.parameters(), lr=0.001, weight_decay=1e-4)
+    optimizer = optim.Adam(
+        filter(lambda p: p.requires_grad, model.parameters()),
+        lr=0.001,
+        weight_decay=1e-4
+    )
 
     scheduler = optim.lr_scheduler.StepLR(
         optimizer, 
@@ -32,6 +61,8 @@ def main():
     # ----Train the Model----
     epochs = 20
     patience = 7
+
+    print(f"Training model: {args.model}")
 
     train_model(
         model=model,
