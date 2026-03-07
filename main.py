@@ -20,7 +20,7 @@ def main():
         "--model",
         type=str,
         default="baseline",
-        choices=["baseline", "resnet", "resnet_scratch"]
+        choices=["baseline", "resnet", "resnet_scratch"],
         help="Choose model architecture"
     )
 
